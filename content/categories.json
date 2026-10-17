@@ -1,0 +1,54 @@
+{
+ "bsod": {
+  "label": "Blue Screen (BSOD)",
+  "description": "Stop codes that halt Windows with a blue crash screen."
+ },
+ "update": {
+  "label": "Windows Update",
+  "description": "Problems downloading, installing or upgrading Windows."
+ },
+ "win32": {
+  "label": "System (Win32)",
+  "description": "Traditional Windows system error codes."
+ },
+ "store": {
+  "label": "Microsoft Store",
+  "description": "Errors with Store downloads, installs and sign-in."
+ },
+ "activation": {
+  "label": "Activation",
+  "description": "Issues with licenses and product keys."
+ },
+ "network": {
+  "label": "Network",
+  "description": "Wi-Fi, Ethernet and internet connection problems."
+ },
+ "startup": {
+  "label": "Startup & Boot",
+  "description": "When Windows fails to start up properly."
+ },
+ "driver": {
+  "label": "Drivers",
+  "description": "Driver failures and Device Manager errors."
+ },
+ "hardware": {
+  "label": "Hardware",
+  "description": "Drive, memory, graphics card and heat issues."
+ },
+ "performance": {
+  "label": "Performance",
+  "description": "Sluggishness, freezing and high resource use."
+ },
+ "file-system": {
+  "label": "Files & Disk",
+  "description": "File corruption, NTFS errors and access issues."
+ },
+ "audio": {
+  "label": "Audio",
+  "description": "Missing sound and audio device errors."
+ },
+ "security": {
+  "label": "Security",
+  "description": "Defender, SmartScreen and permission problems."
+ }
+}

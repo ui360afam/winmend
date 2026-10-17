@@ -1,0 +1,42 @@
+[
+ {
+  "question": "What exactly is a stop code?",
+  "answer": "A stop code is the label Windows displays when a fatal error forces the system to shut down. It's the line on the blue screen that says something like `Stop code: CRITICAL_PROCESS_DIED`, or a hex value such as `0x000000EF`. Every code corresponds to the condition that halted the system, so it points you toward the cause rather than being the cause. Decoding it helps you narrow things down to drivers, memory, storage or system files."
+ },
+ {
+  "question": "Is it possible to fix a blue screen without a full Windows reinstall?",
+  "answer": "In nearly every case, yes. Most blue screens come down to a driver, RAM, storage or a recent update, and each of those can be fixed with DISM/SFC, a driver rollback or clean install, a memory test, or removing a recent update. Reinstalling Windows should be your final option, since it also wipes out the logs, dump files and update history you'd use to find the true cause."
+ },
+ {
+  "question": "Will CRITICAL_PROCESS_DIED harm my PC or delete my files?",
+  "answer": "The crash on its own doesn't destroy anything. Windows stopped intentionally to avoid damage, and the stop code doesn't remove your files. The actual risks are losing unsaved work in any open apps and, if failing RAM or a dying drive is to blame, continued silent corruption. Save what you're working on, make a backup, and then address the root cause: system files, drivers, or a memory test."
+ },
+ {
+  "question": "Where can I see which error code my computer is showing?",
+  "answer": "If you get a blue screen, note the `Stop code:` line (plus `What failed:` if it appears) and take a photo before the automatic restart clears it. After a crash, you can find the codes in Event Viewer (`eventvwr.msc` → Windows Logs → System → BugCheck event, ID 1001) and in Reliability Monitor (Control Panel → System and Security → Security and Maintenance → Reliability Monitor). For errors that aren't blue screens, the code usually appears in the error message or dialog, for example 0x80070002."
+ },
+ {
+  "question": "Should I use a registry cleaner?",
+  "answer": "In most cases, no, and it's best to skip them. Windows doesn't build up any meaningful “registry junk” that slows your PC down, and overzealous cleaners can remove entries that Windows or your programs still rely on, leading to problems that are tough to track down. For genuine upkeep, stick with the built-in tools: Storage Sense or Disk Cleanup for files, and DISM/SFC for corrupted system files."
+ },
+ {
+  "question": "Why do I only get blue screens while playing games?",
+  "answer": "Gaming pushes your GPU, VRAM, system RAM, power delivery and kernel drivers as hard as they can go, so any borderline component tends to fail there first. Common culprits include an unstable graphics driver (update it, roll it back, or do a clean reinstall), an overclock or undervolt that isn't stable, overheating, or a power supply that's aging or too small. If `What failed:` names a GPU driver, or you see stop codes like VIDEO_TDR_FAILURE, the graphics stack is the most likely cause."
+ },
+ {
+  "question": "Will a BIOS/UEFI update fix my stop code?",
+  "answer": "Only in certain situations. BIOS updates are important for supporting new CPUs or RAM, improving memory compatibility (XMP/EXPO stability), and fixing bugs the manufacturer lists in its release notes. They aren't a cure-all for blue screens. Update only if the vendor's notes mention a fix that matches your symptom, follow the manufacturer's steps precisely, and never lose power during the flash, because a failed flash can leave the motherboard unable to boot."
+ },
+ {
+  "question": "What do error codes beginning with 0x8 mean?",
+  "answer": "Codes such as 0x80070002 are 32-bit HRESULT values. The leading `8` is the severity bit, which flags the operation as failed (a successful result starts with `0x0...`, known as S_OK). The remaining digits identify the facility and the specific error. In 0x80070002, facility 7 is Win32 and code 2 means “file not found.” So rather than random hex, think of the code as an exact ID you can look up."
+ },
+ {
+  "question": "How long should SFC and DISM take, and can I stop them partway through?",
+  "answer": "Plan on about 5-15 minutes for `sfc /scannow` and anywhere from 10 to 30+ minutes for `DISM /Online /Cleanup-Image /RestoreHealth`, and longer on slow drives or PCs with lots of installed updates. Don't stop either tool in the middle of a repair: canceling during a repair pass can leave components partially fixed, which puts you in a worse spot than before. Let them run to completion, and only dig deeper if the window sits for hours with no disk activity."
+ },
+ {
+  "question": "How do I know whether to repair Windows or reinstall it?",
+  "answer": "Always try repairs first. DISM/SFC, rolling back drivers and removing a recent update fix the vast majority of issues, and an in-place upgrade (which keeps your files and apps) can clear up deep corruption without losing data. A clean reinstall is worth it when boot repair fails completely, the component store can't be restored, or the system stays unstable even though your hardware tests pass. Whichever path you choose, back up your files before you start."
+ }
+]

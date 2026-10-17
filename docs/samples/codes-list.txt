@@ -1,0 +1,8 @@
+# One code per line. Optional extras: code | title | category | official message
+# Categories: bsod, update, win32, store, activation, network, startup, driver,
+#             hardware, performance, file-system, audio, security
+0x80070426
+0x8024402C | Windows Update error 0x8024402C | update | The proxy server or target server name cannot be resolved.
+DRIVER_POWER_STATE_FAILURE
+Code 28
+0x80244022 | Windows Update error 0x80244022 (service unavailable) | update

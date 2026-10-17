@@ -1,0 +1,233 @@
+[
+ {
+  "slug": "how-to-read-bsod",
+  "title": "Reading a Blue Screen: A Plain-English Guide to Stop Codes",
+  "description": "Learn what each part of the blue screen means, where to spot the stop code, how to interpret the `What failed:` line, and how Event Viewer and Reliability Monitor recover the details when your PC restarts too fast.",
+  "readMinutes": 5,
+  "category": "bsod",
+  "sections": [
+   {
+    "heading": "What the blue screen really means",
+    "body": "A blue screen appears when Windows runs into a fault it can't safely recover from. Instead of carrying on in a corrupted state, it stops on purpose (Microsoft calls this a “bug check”) and displays a sad face, a percentage counter and a QR code. That percentage tracks the crash dump as it's saved to disk: Windows is gathering evidence, not causing damage. Think of the crash as the symptom and the stop code as your best lead on what's behind it."
+   },
+   {
+    "heading": "Spotting the stop code",
+    "body": "Near the bottom of the screen you'll see a line beginning with `Stop code:`, such as `Stop code: MEMORY_MANAGEMENT`. Certain crashes add a `What failed:` line with a file name as well. If your PC is configured to restart automatically, the screen may only stay up for a few seconds, so snap a photo with your phone before it reboots."
+   },
+   {
+    "heading": "Making sense of “What failed:”",
+    "body": "When `What failed:` appears, it identifies the specific driver or module Windows holds responsible, and it's frequently a `.sys` file. When it names a vendor driver like `nvlddmkm.sys` (the NVIDIA graphics driver), that product is your prime suspect, so update, roll back or do a clean reinstall of that vendor's driver. An empty field usually means the problem sits deeper: RAM, storage, system files or a core Windows component. In that case, begin with memory and disk tests rather than chasing drivers."
+   },
+   {
+    "heading": "Get more detail from Event Viewer and Reliability Monitor",
+    "body": "Even if the PC reboots before you can read the screen, Windows still logs the crash. Launch Event Viewer (`eventvwr.msc`), go to Windows Logs → System, and find the `BugCheck` entry (Event ID 1001) that matches the time of the crash. Its details include the stop code and its parameters. Reliability Monitor (Control Panel → System and Security → Security and Maintenance → Reliability Monitor) lays out crashes, installs and updates on a daily timeline, so it's easy to see what changed just before the trouble began. For in-depth analysis with a tool such as WinDbg, minidump files are stored in `C:\\Windows\\Minidump`."
+   },
+   {
+    "heading": "Stay calm, and hold off on reinstalling",
+    "body": "One blue screen is often a one-time event caused by a driver hiccup or a passing glitch, and the bug check itself shows that Windows shut down safely. Reinstalling erases the evidence you need (update history, Event Viewer logs, dump files) and seldom cures hardware problems such as faulty RAM. Decode the stop code, look it up, and work through the fixes from safest to most involved. Save a reinstall for when everything else has failed."
+   }
+  ],
+  "relatedSlugs": [
+   "critical-process-died",
+   "memory-management",
+   "irql-not-less-or-equal"
+  ],
+  "tools": [
+   "decoder",
+   "lookup"
+  ]
+ },
+ {
+  "slug": "safe-mode-guide",
+  "title": "Three Reliable Ways to Start Windows 10 or 11 in Safe Mode",
+  "description": "Proven methods for getting into Safe Mode on Windows 10 and 11, a clear look at what it can and can't fix, and the steps to return to a normal boot.",
+  "readMinutes": 5,
+  "category": "startup",
+  "sections": [
+   {
+    "heading": "What Safe Mode can (and can't) do for you",
+    "body": "Safe Mode loads Windows with only a bare set of drivers and services. That makes it the ideal environment for removing a problem driver or update, running SFC/DISM, scanning for malware, or undoing a recent change. On its own, though, it repairs nothing, and it won't hide hardware faults: a bad RAM module or failing disk will still crash in Safe Mode. Here's a handy test. If the PC is stable in Safe Mode but crashes in a normal boot, suspect a third-party driver or startup program. If it crashes in Safe Mode too, suspect hardware or core system files."
+   },
+   {
+    "heading": "Method 1: Advanced startup from Settings",
+    "body": "On Windows 11, open Settings → System → Recovery → Advanced startup → Restart now. On Windows 10, open Settings → Update & Security → Recovery → Advanced startup → Restart now. Once the PC reboots, select Troubleshoot → Advanced options → Startup Settings → Restart, then press `4` for Safe Mode, `5` for Safe Mode with Networking, or `6` for Safe Mode with Command Prompt."
+   },
+   {
+    "heading": "Method 2: Hold Shift while restarting",
+    "body": "Keep `Shift` held down while you click Restart from the power button in the Start menu (the power icon on the sign-in screen works too). Windows goes directly to the recovery menu, where you follow the same path: Troubleshoot → Advanced options → Startup Settings → Restart. It's the quickest option when you can get to the desktop or login screen but the Settings app isn't cooperating."
+   },
+   {
+    "heading": "Method 3: msconfig for a Safe Mode that sticks",
+    "body": "Press `Win+R`, type `msconfig`, and switch to the Boot tab. Check `Safe boot`, choose Minimal (or Network if you need internet access), click OK, and restart. Be aware that Windows will boot into Safe Mode every single time until you clear that checkbox, so turn it off once you're finished. This approach is useful when you expect to need several Safe Mode sessions back to back."
+   },
+   {
+    "heading": "Returning to normal Windows",
+    "body": "In most cases, a regular restart takes you back to a normal boot. If Safe Mode keeps reappearing, open `msconfig` again, clear the `Safe boot` checkbox, and restart. If Windows won't start at all, interrupt startup two times in a row by holding the power button while Windows is loading. Windows will then present its recovery options, and you can proceed through Troubleshoot → Advanced options."
+   }
+  ],
+  "relatedSlugs": [
+   "bad-system-config-info",
+   "error-code-43",
+   "kernel-power-41"
+  ],
+  "tools": [
+   "triage",
+   "plan"
+  ]
+ },
+ {
+  "slug": "sfc-dism-repair-guide",
+  "title": "Fix Corrupted Windows System Files with DISM and SFC, in the Right Order",
+  "description": "Learn why DISM should run before SFC, which commands to type in an admin prompt, how to pull useful details from CBS.log, and when it's time to bring in chkdsk.",
+  "readMinutes": 6,
+  "category": "file-system",
+  "sections": [
+   {
+    "heading": "Why you run DISM first",
+    "body": "`sfc /scannow` fixes damaged system files by replacing them with known-good versions from the component store (`WinSxS`). When that store is corrupted too, SFC has no clean source to work from and can end up reporting the same unfixable files again and again. `DISM /RestoreHealth` repairs the component store itself, downloading clean copies from Windows Update if it needs to, which gives SFC a healthy source afterward. So the sequence is DISM, then SFC, then a second SFC pass if the first one couldn't fix everything."
+   },
+   {
+    "heading": "Step 1: Use DISM to repair the component store",
+    "body": "Open Command Prompt or PowerShell as an administrator (right-click Start → Terminal (Admin)). Check the store, then repair it:\n- `DISM /Online /Cleanup-Image /CheckHealth`: a fast check that reports whether the store has already been flagged as corrupted\n- `DISM /Online /Cleanup-Image /ScanHealth`: a deeper, slower scan that doesn't change anything\n- `DISM /Online /Cleanup-Image /RestoreHealth`: scans and fixes problems; allow 10-30+ minutes and make sure your internet connection works"
+   },
+   {
+    "heading": "Step 2: Run System File Checker",
+    "body": "From that same admin prompt, run `sfc /scannow` and wait for it to complete. Don't close the window while it's working. If you see “did not find any integrity violations,” nothing needed repair. “Found corrupt files and successfully repaired them” means it fixed everything it could. “Found corrupt files but was unable to fix some of them” means you should run DISM, then SFC once more, ideally after a restart, and from Safe Mode if the desktop isn't stable."
+   },
+   {
+    "heading": "Step 3: Check CBS.log for the specifics",
+    "body": "Everything SFC does is recorded in `C:\\Windows\\Logs\\CBS\\CBS.log`. To copy only the SFC entries into a file on your desktop, run `findstr /c:\"[SR]\" %windir%\\Logs\\CBS\\CBS.log > \"%userprofile%\\Desktop\\sfcdetails.txt\"`. Look for lines that say “Cannot repair member file”: they list the exact files that remain damaged, which is a strong hint when one particular feature keeps breaking."
+   },
+   {
+    "heading": "Step 4: Knowing when chkdsk is needed",
+    "body": "When SFC finds the same corruption every time, or Event Viewer reports disk errors, the file system underneath may be damaged. Run `chkdsk C: /f` from an admin prompt and press `Y` to schedule the check for your next restart (Windows locks the system drive while it's running). Adding `/r`, as in `chkdsk C: /f /r`, also hunts for bad sectors and recovers whatever data is readable. It's thorough, but it's slow and can take several hours. If you think the drive itself is failing, back up your important files before doing anything else."
+   }
+  ],
+  "relatedSlugs": [
+   "0x80073712",
+   "0x80070570",
+   "0x8007007e"
+  ],
+  "tools": [
+   "decoder",
+   "plan"
+  ]
+ },
+ {
+  "slug": "fix-windows-update-guide",
+  "title": "Fixing a Stuck or Failing Windows Update: A Step-by-Step Playbook",
+  "description": "A step-by-step plan for Windows Updates that hang, fail or crawl: the troubleshooter, freeing disk space, resetting Update services, DISM/SFC, manual installs from the Update Catalog, and an in-place upgrade when nothing else works.",
+  "readMinutes": 7,
+  "category": "update",
+  "sections": [
+   {
+    "heading": "Step 1: Try the troubleshooter and make room on your drive",
+    "body": "Begin with the troubleshooter that ships with Windows: Settings → System → Troubleshoot → Other troubleshooters → Windows Update → Run (on Windows 10, Settings → Update & Security → Troubleshoot → Additional troubleshooters). It automatically resets the Update components that most often break, so restart and try the update again before moving on. Also check your free space in Settings → System → Storage. Windows needs room to download and prepare updates, and an almost-full system drive is a common, easy-to-overlook reason updates fail. Empty the Recycle Bin, tidy your Downloads folder, and run Disk Cleanup."
+   },
+   {
+    "heading": "Step 2: Reset the Update services and the download cache",
+    "body": "Stuck downloads are very often caused by a corrupted `SoftwareDistribution` folder. In an admin Command Prompt, run `net stop wuauserv` and `net stop bits`, then `ren C:\\Windows\\SoftwareDistribution SoftwareDistribution.old`, then `net start wuauserv` and `net start bits`. Windows creates a fresh folder automatically. Go back to Settings → Windows Update and try again."
+   },
+   {
+    "heading": "Step 3: Repair system files using DISM and SFC",
+    "body": "Errors in the `0x800737xx` range typically point to a damaged component store or damaged system files. Run `DISM /Online /Cleanup-Image /RestoreHealth` followed by `sfc /scannow` (our SFC/DISM guide covers the full sequence and how to read the logs), then restart and retry the update. Together, these two tools fix the very components Windows Update relies on."
+   },
+   {
+    "heading": "Step 4: Install the update by hand",
+    "body": "Look up the update's KB number in Settings → Windows Update → Update history, then search for that number in the Microsoft Update Catalog (catalog.update.microsoft.com). Download the `.msu` file that matches your Windows version and architecture and run it. Because this standalone installer skips the broken download process completely, it often works when Windows Update doesn't."
+   },
+   {
+    "heading": "Step 5: Pause, try again later, or do an in-place upgrade",
+    "body": "Pause updates for a few days to give Microsoft time to release a corrected package. Bad updates on Microsoft's end happen more often than you'd think, and they get fixed on the server side. If the failures keep happening for weeks, the officially supported last resort is an in-place upgrade. Run the Windows 11 Installation Assistant (or mount an ISO) and pick “Keep personal files and apps.” This replaces Windows components while leaving your data alone. Make a backup first regardless, and if the same error code still shows up after that, turn your attention to drivers or failing hardware."
+   }
+  ],
+  "relatedSlugs": [
+   "0x80070002",
+   "0x80073712",
+   "0x800f0922",
+   "0x8024402f"
+  ],
+  "tools": [
+   "lookup",
+   "plan"
+  ]
+ },
+ {
+  "slug": "diagnose-ram-and-disk-health",
+  "title": "Check Your Memory and Drive Health Before They Fail",
+  "description": "How to use Windows Memory Diagnostic, Event Viewer, chkdsk and SMART data to catch failing RAM or a dying drive before it costs you your files.",
+  "readMinutes": 7,
+  "category": "hardware",
+  "sections": [
+   {
+    "heading": "Why hardware testing comes first",
+    "body": "Blue screens that seem random (`MEMORY_MANAGEMENT`, `KERNEL_DATA_INPAGE_ERROR`), files that abruptly refuse to open, and unrelated programs crashing at the same time are textbook signs of bad memory or a failing drive. No software fix can repair faulty RAM, and a drive on its way out undermines every other repair you try. That's why it pays to confirm or rule out hardware before anything else. A test takes about an hour, while a wrong guess can eat your whole weekend."
+   },
+   {
+    "heading": "Run Windows Memory Diagnostic and check the results",
+    "body": "Press `Win+R`, type `mdsched.exe`, and select “Restart now and check for problems (recommended).” Your PC restarts into the diagnostic tool before Windows loads and runs standard and extended memory passes. Expect 15-30 minutes, or more on systems with a large amount of RAM. The results notification after reboot is easy to overlook, so verify them in Event Viewer: open `eventvwr.msc` → Windows Logs → System and find the `MemoryDiagnostics-Results` event. “No errors” means your RAM passed, and any reported error means at least one module is bad. To pinpoint the faulty stick, test with a single module installed at a time, or let MemTest86 (free, runs from a USB drive) run overnight for a more thorough check."
+   },
+   {
+    "heading": "Scan the file system and disk surface with chkdsk",
+    "body": "From an admin prompt, run `chkdsk C: /f` and press `Y` so it runs at the next restart (Windows keeps the system drive locked while it's in use). Using `/r` as well, as in `chkdsk C: /f /r`, adds a bad-sector scan and recovers readable data, but it takes much longer, frequently several hours. chkdsk moves through stages: first the basic file system structure, then file-name links and indexes, then security descriptors, and finally the bad-sector scan if you included `/r`. Errors that come back run after run are a serious red flag."
+   },
+   {
+    "heading": "Look at SMART status and overall drive health",
+    "body": "Open PowerShell and run `Get-PhysicalDisk | Select-Object FriendlyName, HealthStatus`. You're hoping to see “Healthy.” (The older `wmic diskdrive get status` command still functions, but wmic is deprecated in recent Windows builds.) Windows 11 also displays drive status in Settings → System → Storage → Advanced storage settings → Disks & volumes. For full SMART details such as temperature, reallocated sectors and pending sectors, many people use a free third-party tool like CrystalDiskInfo. A “Caution” rating or a reallocated-sector count that keeps climbing means it's time to back up and plan for a new drive."
+   },
+   {
+    "heading": "Warning signs of a dying drive: act early",
+    "body": "Take these seriously as early alerts: chkdsk finding and repairing errors over and over, files that load slowly or fail to copy, folder or file names turning into garbled text, Windows locking up during heavy disk activity, or a SMART status that isn't healthy. Back up right away, then arrange a replacement. Drives showing these symptoms can go downhill fast, and paying for professional data recovery after a complete failure costs much more than buying a new drive."
+   }
+  ],
+  "relatedSlugs": [
+   "memory-management",
+   "kernel-data-inpage-error",
+   "disk-read-error-occurred",
+   "100-disk-usage-windows"
+  ],
+  "tools": [
+   "triage",
+   "plan"
+  ]
+ },
+ {
+  "slug": "driver-problems-fix-guide",
+  "title": "Solving Driver Errors: Device Manager Codes 10, 31, 43 and More",
+  "description": "Understand what Device Manager's error codes are telling you, then update, roll back or cleanly reinstall drivers. Includes GPU cleanup for Code 43, choosing between manufacturer and Windows Update drivers, and BIOS/firmware advice.",
+  "readMinutes": 6,
+  "category": "driver",
+  "sections": [
+   {
+    "heading": "Open Device Manager and check the actual status",
+    "body": "Right-click Start and choose Device Manager (or run `devmgmt.msc`). Any device with a problem displays a warning icon. Open its Properties and look at the General tab to read the full status message and code, for example “This device cannot start. (Code 10).” That code is your diagnosis. The warning icon by itself says nothing about how the device failed, and Code 10 and Code 43 usually have quite different causes."
+   },
+   {
+    "heading": "Your three main fixes: update, roll back, uninstall",
+    "body": "All three live on the device's Driver tab. Update driver checks Windows Update and also lets you point to a driver package you've downloaded. Roll Back Driver restores the previous version, which is the right choice when problems began right after an update (the button is greyed out if there's no earlier version). Uninstall device removes the device, and Windows puts a generic driver back on the next boot. Only check “Attempt to remove the driver for this device” if you're planning to install a fresh driver yourself. Restart after every change so you can tell which step made the difference."
+   },
+   {
+    "heading": "Choosing manufacturer drivers or Windows Update drivers",
+    "body": "Drivers from Windows Update are safe and install themselves, but they often lag a version behind. The manufacturer's website (your GPU vendor, your laptop maker's support page, or your motherboard or chipset vendor) has the newest driver built for your exact hardware. Graphics drivers in particular should come straight from NVIDIA, AMD or Intel. Steer clear of generic “driver updater” programs. They regularly install the wrong drivers or bundle extra software, and Windows already offers the same update process they ask you to pay for."
+   },
+   {
+    "heading": "Code 43 and cleaning up graphics drivers",
+    "body": "When a graphics card shows Code 43 (“Windows has stopped this device because it has reported problems”), it usually means the driver failed badly enough that Windows shut the device off. The fix is a clean reinstall. Uninstall the device in Device Manager, restart in Safe Mode, and run DDU (Display Driver Uninstaller, a widely used third-party cleanup tool) to wipe out every trace of the old driver. Then install the latest driver, or an older version known to be stable if the newest one keeps crashing. If Code 43 persists after a clean install on a card that has been running hot or pushed hard with overclocking, the card itself may be the problem."
+   },
+   {
+    "heading": "Codes 10 and 31, plus a note on firmware",
+    "body": "Code 10 (“This device cannot start”) and Code 31 (“Windows cannot load the drivers required for this device”) frequently show up after a Windows or driver update. Start with Roll Back. Next, do a full power-off: shut the PC down, and on a laptop hold the power button for roughly 30 seconds (a hard reset that drains leftover power). Then reinstall the vendor's driver. If the device still fails after a clean driver install, hardware or firmware is the likely cause. Visit the manufacturer's support page for BIOS/UEFI and device firmware updates, follow the instructions to the letter, and never interrupt a firmware update once it starts."
+   }
+  ],
+  "relatedSlugs": [
+   "error-code-10",
+   "error-code-43",
+   "video-tdr-failure",
+   "dpc-watchdog-violation"
+  ],
+  "tools": [
+   "decoder",
+   "plan"
+  ]
+ }
+]

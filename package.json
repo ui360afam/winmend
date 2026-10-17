@@ -1,0 +1,17 @@
+{
+  "name": "winmend",
+  "version": "1.0.0",
+  "description": "Windows error decoder: BSOD stop codes, update, Win32 and Store errors with triage, log scanning and fix plans.",
+  "private": true,
+  "main": "server.js",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.js",
+    "local": "node scripts/run-local.js",
+    "import": "node scripts/import.js",
+    "scrape": "node scripts/scrape.js",
+    "zip": "node scripts/make-zip.js",
+    "check": "node scripts/check.js"
+  },
+  "license": "UNLICENSED"
+}

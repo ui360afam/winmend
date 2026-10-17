@@ -1,0 +1,24 @@
+[
+ {
+  "slug": "0x80070070",
+  "title": "Error 0x80070070 (ERROR_DISK_FULL)",
+  "codes": ["0x80070070", "ERROR_DISK_FULL", "-2147024784", "error 112"],
+  "category": "file-system",
+  "severity": "medium",
+  "frequency": "common",
+  "windowsVersions": ["Windows 10", "Windows 11"],
+  "summary": "Windows or an installer stopped because the target drive ran out of free space.",
+  "meaning": "0x80070070 wraps Win32 error 112, ERROR_DISK_FULL. It appears during updates, upgrades and large installs when the drive being written to has no room left for the files.",
+  "commonCauses": ["The system drive is nearly full", "Old update files and temporary files piling up"],
+  "fixes": [
+   { "title": "Check free space", "detail": "Open Settings > System > Storage and look at the drive the installer writes to.", "difficulty": "easy", "timeEstimate": "2 min" },
+   { "title": "Clear temporary files", "detail": "In Settings > System > Storage > Temporary files, tick Windows Update Cleanup and Temporary files, then remove them. `cleanmgr` does the same on older builds.", "difficulty": "easy", "timeEstimate": "5-15 min" },
+   { "title": "Move large folders off the drive", "detail": "Move videos, downloads and old backups to another drive or cloud storage, then try again.", "difficulty": "easy", "timeEstimate": "10-30 min", "riskNote": "Copy first and check the copy opens before deleting the originals." }
+  ],
+  "prevention": ["Keep at least 20 GB free on the system drive", "Turn on Storage Sense"],
+  "signals": ["symptom:update-fail", "when:install", "change:storage-full", "boot:yes"],
+  "relatedSlugs": [],
+  "tags": ["disk-space", "storage"]
+ },
+ { "code": "0x8007045B" }
+]

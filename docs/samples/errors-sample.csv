@@ -1,0 +1,3 @@
+code,title,category,severity,summary,aliases,causes,fixes,prevention,tags
+0x80070070,Error 0x80070070 (ERROR_DISK_FULL),file-system,medium,"Windows or an installer stopped because the target drive ran out of free space.",ERROR_DISK_FULL|-2147024784|error 112,The system drive is nearly full|Old update files and temporary files piling up,"Check free space: Open Settings > System > Storage and look at the drive the installer writes to.|Clear temporary files: In Settings > System > Storage > Temporary files, remove Windows Update Cleanup and temporary files.|Move large folders: Move videos and downloads to another drive or cloud storage.",Keep at least 20 GB free on the system drive|Turn on Storage Sense,disk-space|storage
+0x80240017,,update,,,WU_E_NOT_APPLICABLE,,,,
